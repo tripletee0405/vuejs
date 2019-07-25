@@ -15,7 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/admin/index', function () {
+Route::get('/index', function () {
     return view('index');
 });
 Route::resource('products', 'ProductController');
