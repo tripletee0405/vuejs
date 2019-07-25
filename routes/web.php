@@ -12,10 +12,23 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('index');
+})->middleware('auth');
 
 Route::get('/index', function () {
     return view('index');
 });
+
 Route::resource('products', 'ProductController');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::resource('users', 'UserController');
+
+Route::get('/getCurrentUser', function() {
+   return Auth::user()->load('roles');
+});
+
+Route::match(['get', 'post'], '/logout', 'Auth\LoginController@logout')->name('logout');

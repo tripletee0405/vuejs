@@ -31,7 +31,7 @@ Vue.component('form-input-binding', require('./components/Input.vue').default);
 Vue.component('event-handling', require('./components/EventHandling.vue').default);
 Vue.component('welcome-text', require('./components/Parent.vue').default);
 Vue.component('api-calling', require('./components/ApiCalling.vue').default);
-
+Vue.component('User', require('./components/User.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
