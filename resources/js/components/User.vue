@@ -37,18 +37,28 @@
         <tbody v-if="list_users.length">
           <tr v-for="user in list_users">
             <td>{{ user.id }}</td>
-            <td>{{ user.name }}</td>
-            <td>{{ user.email }}</td>
+            <td v-if="!user.isEdit">{{ user.name }}</td>
+            <td v-else>
+              <input type="text" class="form-control" v-model="user.name">
+            </td>
+            <td v-if="!user.isEdit">{{ user.email }}</td>
+            <td v-else>
+              <input type="text" class="form-control" v-model.number="user.email">
+            </td>
             <td>
               <span v-for="role in user.roles">
                 {{ role.name }},
               </span>
             </td>
-            <td v-if="checkIsAdmin">
-              <button class="btn btn-success">
+            <td v-if="checkIsAdmin && !user.isEdit">
+              <button class="btn btn-success" @click="user.isEdit = true">
                 Edit
               </button>
-              <button class="btn btn-danger">Delete</button>
+              <button @click="deleteUser(user)" class="btn btn-danger">Delete</button>
+            </td>
+            <td v-else>
+              <button class="btn btn-primary" @click="updateUser(user)">Save</button>
+              <button class="btn btn-danger" @click="user.isEdit = false">Cancel</button>
             </td>
           </tr>
         </tbody>
@@ -108,16 +118,30 @@ export default {
       }
     },
     createUser() {
-    axios.post('/users', {user: this.userCreate})
-    .then(response => {
+      axios.post('/users', {user: this.userCreate})
+      .then(response => {
         console.log(response)
         this.userCreate = {}
         this.getListUsers()
-    })
-    .catch(error => {
+      })
+      .catch(error => {
         console.log(error)
-    })
-}
+      })
+    },
+    updateUser(user) {
+      axios.put('/users/' + user.id, {name: user.name, email: user.email})
+      .then(response => {
+        console.log(response.data.result)
+        user.isEdit = false
+      })
+    },
+    deleteUser(user) {
+      axios.delete('/users/' + user.id, {userDelete: user})
+      .then(response => {
+        console.log(response.data.result)
+        this.getListUsers()
+      })
+    }
   }
 };
 </script>

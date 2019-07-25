@@ -47,6 +47,7 @@ class UserController extends Controller
         $user->save();
 
         $user->roles()->attach($role);
+
         return response('success');
     }
 
@@ -81,7 +82,16 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::find($id);
+
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+
+        $user->save();
+
+        return response([
+            'result' => 'success'
+        ], 200);
     }
 
     /**
@@ -90,8 +100,19 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $data = $request->input('userDelete');
+
+        $user = User::find($id);
+
+        $role  = Role::where('name', $data['role'])->first();
+
+        $user->roles()->detach($role['id']);
+
+        $user->delete();
+        return response([
+            'result' => 'success'
+        ], 200);
     }
 }

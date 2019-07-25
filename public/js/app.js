@@ -2557,6 +2557,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2619,6 +2629,26 @@ __webpack_require__.r(__webpack_exports__);
         _this3.getListUsers();
       })["catch"](function (error) {
         console.log(error);
+      });
+    },
+    updateUser: function updateUser(user) {
+      axios.put('/users/' + user.id, {
+        name: user.name,
+        email: user.email
+      }).then(function (response) {
+        console.log(response.data.result);
+        user.isEdit = false;
+      });
+    },
+    deleteUser: function deleteUser(user) {
+      var _this4 = this;
+
+      axios["delete"]('/users/' + user.id, {
+        userDelete: user
+      }).then(function (response) {
+        console.log(response.data.result);
+
+        _this4.getListUsers();
       });
     }
   }
@@ -57013,9 +57043,65 @@ var render = function() {
                 return _c("tr", [
                   _c("td", [_vm._v(_vm._s(user.id))]),
                   _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(user.name))]),
+                  !user.isEdit
+                    ? _c("td", [_vm._v(_vm._s(user.name))])
+                    : _c("td", [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: user.name,
+                              expression: "user.name"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { type: "text" },
+                          domProps: { value: user.name },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(user, "name", $event.target.value)
+                            }
+                          }
+                        })
+                      ]),
                   _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(user.email))]),
+                  !user.isEdit
+                    ? _c("td", [_vm._v(_vm._s(user.email))])
+                    : _c("td", [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model.number",
+                              value: user.email,
+                              expression: "user.email",
+                              modifiers: { number: true }
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { type: "text" },
+                          domProps: { value: user.email },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                user,
+                                "email",
+                                _vm._n($event.target.value)
+                              )
+                            },
+                            blur: function($event) {
+                              return _vm.$forceUpdate()
+                            }
+                          }
+                        })
+                      ]),
                   _vm._v(" "),
                   _c(
                     "td",
@@ -57031,17 +57117,61 @@ var render = function() {
                     0
                   ),
                   _vm._v(" "),
-                  _vm.checkIsAdmin
+                  _vm.checkIsAdmin && !user.isEdit
                     ? _c("td", [
-                        _c("button", { staticClass: "btn btn-success" }, [
-                          _vm._v("\n              Edit\n            ")
-                        ]),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-success",
+                            on: {
+                              click: function($event) {
+                                user.isEdit = true
+                              }
+                            }
+                          },
+                          [_vm._v("\n              Edit\n            ")]
+                        ),
                         _vm._v(" "),
-                        _c("button", { staticClass: "btn btn-danger" }, [
-                          _vm._v("Delete")
-                        ])
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-danger",
+                            on: {
+                              click: function($event) {
+                                return _vm.deleteUser(user)
+                              }
+                            }
+                          },
+                          [_vm._v("Delete")]
+                        )
                       ])
-                    : _vm._e()
+                    : _c("td", [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-primary",
+                            on: {
+                              click: function($event) {
+                                return _vm.updateUser(user)
+                              }
+                            }
+                          },
+                          [_vm._v("Save")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-danger",
+                            on: {
+                              click: function($event) {
+                                user.isEdit = false
+                              }
+                            }
+                          },
+                          [_vm._v("Cancel")]
+                        )
+                      ])
                 ])
               }),
               0

@@ -32,3 +32,5 @@ Route::get('/getCurrentUser', function() {
 });
 
 Route::match(['get', 'post'], '/logout', 'Auth\LoginController@logout')->name('logout');
+
+Route::resource('users', 'UserController');
