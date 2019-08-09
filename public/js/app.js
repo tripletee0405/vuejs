@@ -2594,7 +2594,6 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     this.getListRole(); //lấy danh sách role
   },
-  // in ra màn hình
   methods: {
     getListRole: function getListRole() {
       var _this = this;
@@ -2618,11 +2617,11 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    //tạo người dùng mới
+    //đẩy dữ liệu lên db
     editRole: function editRole(role) {
       this.roleEdit.id = role.id, this.roleEdit.name = role.name, this.roleEdit.description = role.description;
     },
-    // sửa user được chọn
+    // sửa role được chọn
     updateRole: function updateRole(roleEdit) {
       var _this3 = this;
 

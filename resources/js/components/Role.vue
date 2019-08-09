@@ -1,21 +1,21 @@
 <template>
  <div class="user-management">
 
-   <!-- Tạo user -->
+   <!-- Tạo role -->
    <div class="create-user container">
     <div>Thêm quyền</div>
     <div class="row">
      <div class="col-md-3">
       <input type="text" v-model="roleCreate.name" class="form-control" placeholder="Role name...">
-      <!-- Thêm name vào Object userCreate bằng v-model -->
+      <!-- Thêm name vào Object roleCreate bằng v-model -->
     </div>
     <div class="col-md-3">
       <input type="text" v-model="roleCreate.description" class="form-control" placeholder="Description...">
-      <!-- Thêm email vào Object userCreate bằng v-model -->
+      <!-- Thêm email vào Object roleCreate bằng v-model -->
     </div>
    <div class="col-md-3">
     <button class="btn btn-primary" @click="createRole()">Create</button>
-    <!-- click vào button để chạy hàm method createUser -->
+    <!-- click vào button để chạy hàm method createRole -->
   </div>
 </div>
 </div>
@@ -55,16 +55,16 @@
        <td>Action</td>
      </tr>
    </thead>
-   <tbody v-if="list_roles.length"> <!-- nếu list_users >0 thì hiển thị tbody -->
-    <tr v-for="role in list_roles"> <!-- lấy user từ list_users -->
+   <tbody v-if="list_roles.length"> <!-- nếu list_role >0 thì hiển thị tbody -->
+    <tr v-for="role in list_roles"> <!-- lấy role từ list_roles -->
       <td>{{ role.id }}</td>
       <td>{{ role.name }}</td>
       <td>{{ role.description }}</td>
       <td>
        <button class="btn btn-success" @click="editRole(role)">Edit</button>
-       <!-- chạy hàm editUser() truyền Object user vào -->
+       <!-- chạy hàm editRole() truyền Object role vào -->
        <button class="btn btn-danger" @click="deleteRole(role)">Delete</button>
-       <!-- chạy hàm deleteUser() truyền Object user vào -->
+       <!-- chạy hàm deleteRole() truyền Object role vào -->
      </td>
    </tr>
  </tbody>
@@ -95,7 +95,7 @@ export default {
  },
   created() {
     this.getListRole() //lấy danh sách role
-  }, // in ra màn hình
+  },
 
   methods: {
 
@@ -115,13 +115,13 @@ export default {
           .catch(error => {
             console.log(error)
       })
-        },//tạo người dùng mới
+        },//đẩy dữ liệu lên db
 
     editRole(role){
       this.roleEdit.id = role.id,
       this.roleEdit.name = role.name,
       this.roleEdit.description = role.description
-    },// sửa user được chọn
+    },// sửa role được chọn
 
     updateRole(roleEdit){
           axios.put('/roles/' + roleEdit.id, {name: roleEdit.name, description: roleEdit.description})
@@ -137,7 +137,7 @@ export default {
       console.log(response.data.result),
       this.getListRole()
       })
-    },//xóa user
+    },//xóa role
 
   }
 };
