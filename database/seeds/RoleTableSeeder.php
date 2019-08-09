@@ -5,13 +5,13 @@ use App\Role;
 
 class RoleTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
+   /**
+    * Run the database seeds.
+    *
+    * @return void
+    */
+   public function run()
+   {
        $role_employee = new Role();
        $role_employee->name = 'employee';
        $role_employee->description = 'A Employee User';

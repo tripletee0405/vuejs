@@ -32,6 +32,7 @@ Vue.component('event-handling', require('./components/EventHandling.vue').defaul
 Vue.component('welcome-text', require('./components/Parent.vue').default);
 Vue.component('api-calling', require('./components/ApiCalling.vue').default);
 Vue.component('User', require('./components/User.vue').default);
+Vue.component('Role', require('./components/Role.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

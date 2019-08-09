@@ -1,14 +1,11 @@
 <?php
 
-namespace App\Http\Controllers; 
+namespace App\Http\Controllers;
 
-use App\User;
-use App\Role;
-use App\DetaiUser;
 use Illuminate\Http\Request;
+use App\Role;
 
-
-class UserController extends Controller
+class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::get()->load('roles');
-        return $users;
+        return Role::get();
     }
 
     /**
@@ -39,17 +35,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->input('user');
-        $user = new User();
-        $user->name = $data['name'];
-        $user->email = $data['email'];
-        $user->password = bcrypt('123456');
-        $role  = Role::where('name', $data['role'])->first();
-
-        $user->save();
-
-        $user->roles()->attach($role);
-        return response('success');
+        $this->validate($request, [
+            'name' => 'required',
+            'description' => 'required',
+        ]);
+        Role::create([
+            'name'     => $request->input('name'),
+            'description'    => $request->input('description'),
+        ]);
+        return response([
+            'result'=>'sucess'
+        ],200);
     }
 
     /**
@@ -83,23 +79,19 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'name' => 'required',
+            'description' => 'required',
+        ]);
 
-        $data = $request->input('userEdit');
+        $role = Role::find($id);
+        $role->name = $request->input('name');
+        $role->description = $request->input('description');
 
-        $user = User::find($data['id']);
-        $user->name = $data['name'];
-        $user->email = $data['email'];
-
-        $newRole  = Role::where('name', $data['newRole'])->first();
-        $oldRole  = Role::where('name', $data['oldRole'])->first();
-
-        $user->save();
-
-        $user->roles()->attach($newRole);
-        $user->roles()->detach($oldRole['id']);
+        $role->save();
         return response([
             'result' => 'success'
-        ], 200);       
+        ], 200);
     }
 
     /**
@@ -108,17 +100,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
-        $data = $request->input('userDelete');
-
-        $user = User::find($id);
-
-        $role  = Role::where('name', $data['role'])->first();
-        
-        $user->roles()->detach($role['id']);
-
-        $user->delete();
+        $role = Role::find($id);
+        $role->delete();
         return response([
             'result' => 'success'
         ], 200);

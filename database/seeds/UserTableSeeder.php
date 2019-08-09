@@ -6,14 +6,14 @@ use App\Role;
 
 class UserTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
-        $role_employee = Role::where('name', 'employee')->first();
+   /**
+    * Run the database seeds.
+    *
+    * @return void
+    */
+   public function run()
+   {
+       $role_employee = Role::where('name', 'employee')->first();
        $role_manager  = Role::where('name', 'admin')->first();
        $role_saler = Role::where('name', 'saler')->first();
 
@@ -37,5 +37,5 @@ class UserTableSeeder extends Seeder
        $manager->password = bcrypt('123456');
        $manager->save();
        $manager->roles()->attach($role_manager);
-    }
+   }
 }

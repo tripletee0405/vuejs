@@ -12,12 +12,16 @@
 */
 
 Route::get('/', function () {
+    return view('home');
+})->middleware('auth');
+
+Route::get('/usermanagement', function () {
     return view('index');
 })->middleware('auth');
 
-Route::get('/index', function () {
-    return view('index');
-});
+Route::get('/rolemanagement', function () {
+    return view('role');
+})->middleware('auth');
 
 Route::resource('products', 'ProductController');
 
@@ -34,3 +38,5 @@ Route::get('/getCurrentUser', function() {
 Route::match(['get', 'post'], '/logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::resource('users', 'UserController');
+
+Route::resource('roles', 'RoleController');

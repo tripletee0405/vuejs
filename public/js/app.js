@@ -2489,6 +2489,164 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Role.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Role.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      roleCreate: {
+        name: '',
+        description: ''
+      },
+      //khởi tạo user ban đầu
+      roleEdit: {
+        id: 0,
+        name: '',
+        description: ''
+      },
+      //khởi tạo user cần edit ban đầu, newRole là role mới được chọn, oldRole là role cũ
+      list_roles: []
+    };
+  },
+  created: function created() {
+    this.getListRole(); //lấy danh sách role
+  },
+  // in ra màn hình
+  methods: {
+    getListRole: function getListRole() {
+      var _this = this;
+
+      axios.get('/roles').then(function (response) {
+        _this.list_roles = response.data;
+      });
+    },
+    //lấy danh sách role
+    createRole: function createRole() {
+      var _this2 = this;
+
+      axios.post('/roles', {
+        name: this.roleCreate.name,
+        description: this.roleCreate.description
+      }).then(function (response) {
+        console.log(response.data.result);
+
+        _this2.getListRole();
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    //tạo người dùng mới
+    editRole: function editRole(role) {
+      this.roleEdit.id = role.id, this.roleEdit.name = role.name, this.roleEdit.description = role.description;
+    },
+    // sửa user được chọn
+    updateRole: function updateRole(roleEdit) {
+      var _this3 = this;
+
+      axios.put('/roles/' + roleEdit.id, {
+        name: roleEdit.name,
+        description: roleEdit.description
+      }).then(function (response) {
+        console.log(response.data.result), _this3.getListRole();
+      });
+    },
+    deleteRole: function deleteRole(role) {
+      var _this4 = this;
+
+      axios["delete"]('/roles/' + role.id, {
+        roleDelete: role
+      }).then(function (response) {
+        console.log(response.data.result), _this4.getListRole();
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/User.vue?vue&type=script&lang=js&":
 /*!***************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/User.vue?vue&type=script&lang=js& ***!
@@ -2567,22 +2725,61 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       userCreate: {
         name: '',
         email: '',
-        role: 'employee'
+        role: ''
       },
+      //khởi tạo user ban đầu
+      userEdit: {
+        id: 0,
+        name: '',
+        email: '',
+        newRole: '',
+        oldRole: ''
+      },
+      //khởi tạo user cần edit ban đầu, newRole là role mới được chọn, oldRole là role cũ
       currentUser: {},
-      list_users: []
+      list_users: [],
+      list_roles: []
     };
   },
   created: function created() {
-    this.getCurrentUser();
-    this.getListUsers();
+    this.getCurrentUser(); //người dùng đang sử dụng
+
+    this.getListUsers(); //lấy danh sách người dùng
+
+    this.getListRole(); //lấy danh sách role
   },
+  // in ra màn hình
   methods: {
     getCurrentUser: function getCurrentUser() {
       var _this = this;
@@ -2593,62 +2790,61 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    getListUsers: function getListUsers() {
+    //người dùng đang sử dụng
+    getListRole: function getListRole() {
       var _this2 = this;
 
-      axios.get('/users').then(function (response) {
-        _this2.list_users = response.data;
+      axios.get('/roles').then(function (response) {
+        _this2.list_roles = response.data;
+      });
+    },
+    //lấy danh sách role
+    getListUsers: function getListUsers() {
+      var _this3 = this;
 
-        _this2.list_users.forEach(function (user) {
-          Vue.set(user, 'isEdit', false);
-        });
+      axios.get('/users').then(function (response) {
+        _this3.list_users = response.data;
       })["catch"](function (error) {
         console.log(error);
       });
     },
-    checkIsAdmin: function checkIsAdmin() {
-      if (this.currentUser.roles) {
-        var check = false;
-        this.currentUser.roles.forEach(function (role) {
-          if (role.name === 'admin') {
-            check = true;
-          }
-        });
-        return check;
-      }
-    },
+    //lấy danh sách người dùng
     createUser: function createUser() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.post('/users', {
         user: this.userCreate
       }).then(function (response) {
         console.log(response);
-        _this3.userCreate = {};
+        _this4.userCreate = {}; // gọi đến Object userCreate để lấy thông tin từ Object đẩy lên bảng users
 
-        _this3.getListUsers();
+        _this4.getListUsers(); // load lại list user sau khi thêm
+
       })["catch"](function (error) {
         console.log(error);
       });
     },
-    updateUser: function updateUser(user) {
-      axios.put('/users/' + user.id, {
-        name: user.name,
-        email: user.email
+    //tạo người dùng mới
+    editUser: function editUser(user) {
+      this.userEdit.id = user.id, this.userEdit.name = user.name, this.userEdit.email = user.email, this.userEdit.newRole = user.roles[0].name, this.userEdit.oldRole = user.roles[0].name;
+    },
+    // sửa user được chọn
+    updateUser: function updateUser(userEdit) {
+      var _this5 = this;
+
+      axios.put('/users/' + userEdit.id, {
+        userEdit: this.userEdit
       }).then(function (response) {
-        console.log(response.data.result);
-        user.isEdit = false;
-      });
+        console.log(response.data.result), _this5.getListUsers(); // load lại list User
+      }); //put vào bảng users, lấy id cửa id đang Edit và thông tin vừa sửa
     },
     deleteUser: function deleteUser(user) {
-      var _this4 = this;
+      var _this6 = this;
 
       axios["delete"]('/users/' + user.id, {
         userDelete: user
       }).then(function (response) {
-        console.log(response.data.result);
-
-        _this4.getListUsers();
+        console.log(response.data.result), _this6.getListUsers();
       });
     }
   }
@@ -56892,6 +57088,242 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Role.vue?vue&type=template&id=d888673e&scoped=true&":
+/*!*******************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Role.vue?vue&type=template&id=d888673e&scoped=true& ***!
+  \*******************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "user-management" }, [
+    _c("div", { staticClass: "create-user container" }, [
+      _c("div", [_vm._v("Thêm quyền")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-md-3" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.roleCreate.name,
+                expression: "roleCreate.name"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "text", placeholder: "Role name..." },
+            domProps: { value: _vm.roleCreate.name },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.roleCreate, "name", $event.target.value)
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-3" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.roleCreate.description,
+                expression: "roleCreate.description"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "text", placeholder: "Description..." },
+            domProps: { value: _vm.roleCreate.description },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.roleCreate, "description", $event.target.value)
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-3" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary",
+              on: {
+                click: function($event) {
+                  return _vm.createRole()
+                }
+              }
+            },
+            [_vm._v("Create")]
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _c("div", { staticClass: "edit-user container" }, [
+      _c("div", [_vm._v("Sửa quyền")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-md-3" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.roleEdit.name,
+                expression: "roleEdit.name"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "text" },
+            domProps: { value: _vm.roleEdit.name },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.roleEdit, "name", $event.target.value)
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-3" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.roleEdit.description,
+                expression: "roleEdit.description"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "text" },
+            domProps: { value: _vm.roleEdit.description },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.roleEdit, "description", $event.target.value)
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-3" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary",
+              staticStyle: { "background-color": "orange" },
+              on: {
+                click: function($event) {
+                  return _vm.updateRole(_vm.roleEdit)
+                }
+              }
+            },
+            [_vm._v("Update")]
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _c("div", { staticClass: "list_user table-responsive container" }, [
+      _c("div", [_vm._v("Danh sách quyền")]),
+      _vm._v(" "),
+      _c("table", { staticClass: "table table-hover" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _vm.list_roles.length
+          ? _c(
+              "tbody",
+              _vm._l(_vm.list_roles, function(role) {
+                return _c("tr", [
+                  _c("td", [_vm._v(_vm._s(role.id))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(role.name))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(role.description))]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-success",
+                        on: {
+                          click: function($event) {
+                            return _vm.editRole(role)
+                          }
+                        }
+                      },
+                      [_vm._v("Edit")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger",
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteRole(role)
+                          }
+                        }
+                      },
+                      [_vm._v("Delete")]
+                    )
+                  ])
+                ])
+              }),
+              0
+            )
+          : _vm._e()
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("td", [_vm._v("ID")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Description")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Action")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/User.vue?vue&type=template&id=d884f594&scoped=true&":
 /*!*******************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/User.vue?vue&type=template&id=d884f594&scoped=true& ***!
@@ -56908,271 +57340,275 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "user-management" }, [
-    _vm.checkIsAdmin
-      ? _c("div", { staticClass: "create-user container" }, [
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-md-3" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.userCreate.name,
-                    expression: "userCreate.name"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text", placeholder: "Name..." },
-                domProps: { value: _vm.userCreate.name },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.userCreate, "name", $event.target.value)
-                  }
+    _c("div", { staticClass: "create-user container" }, [
+      _c("div", [_vm._v("Thêm người dùng")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-md-3" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.userCreate.name,
+                expression: "userCreate.name"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "text", placeholder: "Name..." },
+            domProps: { value: _vm.userCreate.name },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
                 }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-md-3" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.userCreate.email,
-                    expression: "userCreate.email"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "email", placeholder: "User email..." },
-                domProps: { value: _vm.userCreate.email },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.userCreate, "email", $event.target.value)
-                  }
+                _vm.$set(_vm.userCreate, "name", $event.target.value)
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-3" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.userCreate.email,
+                expression: "userCreate.email"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "email", placeholder: "User email..." },
+            domProps: { value: _vm.userCreate.email },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
                 }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-md-3" }, [
-              _c(
-                "select",
+                _vm.$set(_vm.userCreate, "email", $event.target.value)
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-3" }, [
+          _c(
+            "select",
+            {
+              directives: [
                 {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.userCreate.role,
-                      expression: "userCreate.role"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  on: {
-                    change: function($event) {
-                      var $$selectedVal = Array.prototype.filter
-                        .call($event.target.options, function(o) {
-                          return o.selected
-                        })
-                        .map(function(o) {
-                          var val = "_value" in o ? o._value : o.value
-                          return val
-                        })
-                      _vm.$set(
-                        _vm.userCreate,
-                        "role",
-                        $event.target.multiple
-                          ? $$selectedVal
-                          : $$selectedVal[0]
-                      )
-                    }
-                  }
-                },
-                [
-                  _c("option", { attrs: { value: "employee" } }, [
-                    _vm._v("Employee")
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "saler" } }, [
-                    _vm._v("Saler")
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "admin" } }, [_vm._v("Admin")])
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-md-3" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-primary",
-                  on: { click: _vm.createUser }
-                },
-                [_vm._v("Create")]
-              )
-            ])
-          ])
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.userCreate.role,
+                  expression: "userCreate.role"
+                }
+              ],
+              staticClass: "form-control",
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.$set(
+                    _vm.userCreate,
+                    "role",
+                    $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                  )
+                }
+              }
+            },
+            _vm._l(_vm.list_roles, function(role) {
+              return _c("option", { domProps: { value: role.name } }, [
+                _vm._v(_vm._s(role.name))
+              ])
+            }),
+            0
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-3" }, [
+          _c(
+            "button",
+            { staticClass: "btn btn-primary", on: { click: _vm.createUser } },
+            [_vm._v("Create")]
+          )
         ])
-      : _vm._e(),
+      ])
+    ]),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _c("div", { staticClass: "edit-user container" }, [
+      _c("div", [_vm._v("Sửa người dùng")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-md-3" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.userEdit.name,
+                expression: "userEdit.name"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "text" },
+            domProps: { value: _vm.userEdit.name },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.userEdit, "name", $event.target.value)
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-3" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.userEdit.email,
+                expression: "userEdit.email"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "email" },
+            domProps: { value: _vm.userEdit.email },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.userEdit, "email", $event.target.value)
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-3" }, [
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.userEdit.newRole,
+                  expression: "userEdit.newRole"
+                }
+              ],
+              staticClass: "form-control",
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.$set(
+                    _vm.userEdit,
+                    "newRole",
+                    $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                  )
+                }
+              }
+            },
+            _vm._l(_vm.list_roles, function(role) {
+              return _c("option", { domProps: { value: role.name } }, [
+                _vm._v(_vm._s(role.name))
+              ])
+            }),
+            0
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-3" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary",
+              staticStyle: { "background-color": "orange" },
+              on: {
+                click: function($event) {
+                  return _vm.updateUser(_vm.userEdit)
+                }
+              }
+            },
+            [_vm._v("Update")]
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("br"),
     _vm._v(" "),
     _c("div", { staticClass: "list_user table-responsive container" }, [
+      _c("div", [_vm._v("Danh sách người dùng")]),
+      _vm._v(" "),
       _c("table", { staticClass: "table table-hover" }, [
-        _c("thead", [
-          _c("tr", [
-            _c("td", [_vm._v("ID")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Name")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Email")]),
-            _vm._v(" "),
-            _c("td", [_vm._v("Role")]),
-            _vm._v(" "),
-            _vm.checkIsAdmin ? _c("td", [_vm._v("Action")]) : _vm._e()
-          ])
-        ]),
+        _vm._m(0),
         _vm._v(" "),
         _vm.list_users.length
           ? _c(
               "tbody",
               _vm._l(_vm.list_users, function(user) {
-                return _c("tr", [
-                  _c("td", [_vm._v(_vm._s(user.id))]),
-                  _vm._v(" "),
-                  !user.isEdit
-                    ? _c("td", [_vm._v(_vm._s(user.name))])
-                    : _c("td", [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: user.name,
-                              expression: "user.name"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { type: "text" },
-                          domProps: { value: user.name },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(user, "name", $event.target.value)
-                            }
-                          }
-                        })
-                      ]),
-                  _vm._v(" "),
-                  !user.isEdit
-                    ? _c("td", [_vm._v(_vm._s(user.email))])
-                    : _c("td", [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model.number",
-                              value: user.email,
-                              expression: "user.email",
-                              modifiers: { number: true }
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { type: "text" },
-                          domProps: { value: user.email },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(
-                                user,
-                                "email",
-                                _vm._n($event.target.value)
-                              )
-                            },
-                            blur: function($event) {
-                              return _vm.$forceUpdate()
-                            }
-                          }
-                        })
-                      ]),
-                  _vm._v(" "),
-                  _c(
-                    "td",
+                return _c(
+                  "tr",
+                  [
+                    _c("td", [_vm._v(_vm._s(user.id))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(user.name))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(user.email))]),
+                    _vm._v(" "),
                     _vm._l(user.roles, function(role) {
-                      return _c("span", [
-                        _vm._v(
-                          "\n              " +
-                            _vm._s(role.name) +
-                            ",\n            "
-                        )
-                      ])
+                      return _c("td", [_vm._v(_vm._s(role.name))])
                     }),
-                    0
-                  ),
-                  _vm._v(" "),
-                  _vm.checkIsAdmin && !user.isEdit
-                    ? _c("td", [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-success",
-                            on: {
-                              click: function($event) {
-                                user.isEdit = true
-                              }
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-success",
+                          on: {
+                            click: function($event) {
+                              return _vm.editUser(user)
                             }
-                          },
-                          [_vm._v("\n              Edit\n            ")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-danger",
-                            on: {
-                              click: function($event) {
-                                return _vm.deleteUser(user)
-                              }
+                          }
+                        },
+                        [_vm._v("Edit")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger",
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteUser(user)
                             }
-                          },
-                          [_vm._v("Delete")]
-                        )
-                      ])
-                    : _c("td", [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-primary",
-                            on: {
-                              click: function($event) {
-                                return _vm.updateUser(user)
-                              }
-                            }
-                          },
-                          [_vm._v("Save")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-danger",
-                            on: {
-                              click: function($event) {
-                                user.isEdit = false
-                              }
-                            }
-                          },
-                          [_vm._v("Cancel")]
-                        )
-                      ])
-                ])
+                          }
+                        },
+                        [_vm._v("Delete")]
+                      )
+                    ])
+                  ],
+                  2
+                )
               }),
               0
             )
@@ -57181,7 +57617,26 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("td", [_vm._v("ID")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Email")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Role")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Action")])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -69492,6 +69947,7 @@ Vue.component('event-handling', __webpack_require__(/*! ./components/EventHandli
 Vue.component('welcome-text', __webpack_require__(/*! ./components/Parent.vue */ "./resources/js/components/Parent.vue")["default"]);
 Vue.component('api-calling', __webpack_require__(/*! ./components/ApiCalling.vue */ "./resources/js/components/ApiCalling.vue")["default"]);
 Vue.component('User', __webpack_require__(/*! ./components/User.vue */ "./resources/js/components/User.vue")["default"]);
+Vue.component('Role', __webpack_require__(/*! ./components/Role.vue */ "./resources/js/components/Role.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -70192,6 +70648,75 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 component.options.__file = "resources/js/components/Parent.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Role.vue":
+/*!******************************************!*\
+  !*** ./resources/js/components/Role.vue ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Role_vue_vue_type_template_id_d888673e_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Role.vue?vue&type=template&id=d888673e&scoped=true& */ "./resources/js/components/Role.vue?vue&type=template&id=d888673e&scoped=true&");
+/* harmony import */ var _Role_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Role.vue?vue&type=script&lang=js& */ "./resources/js/components/Role.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Role_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Role_vue_vue_type_template_id_d888673e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Role_vue_vue_type_template_id_d888673e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "d888673e",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Role.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Role.vue?vue&type=script&lang=js&":
+/*!*******************************************************************!*\
+  !*** ./resources/js/components/Role.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Role_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./Role.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Role.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Role_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Role.vue?vue&type=template&id=d888673e&scoped=true&":
+/*!*************************************************************************************!*\
+  !*** ./resources/js/components/Role.vue?vue&type=template&id=d888673e&scoped=true& ***!
+  \*************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Role_vue_vue_type_template_id_d888673e_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./Role.vue?vue&type=template&id=d888673e&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Role.vue?vue&type=template&id=d888673e&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Role_vue_vue_type_template_id_d888673e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Role_vue_vue_type_template_id_d888673e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
 
 /***/ }),
 
